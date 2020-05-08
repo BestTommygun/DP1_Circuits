@@ -13,8 +13,10 @@ namespace DP1_Circuits.view
 {
     public partial class MainView : Form
     {
+        private SimulationView _simulationView;
         public MainView()
         {
+            _simulationView = new SimulationView();
             InitializeComponent();
         }
 

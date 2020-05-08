@@ -1,4 +1,5 @@
 ﻿using Circuits.Models;
+using Circuits.Models.Nodes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,6 +23,14 @@ namespace DP1_Circuits.controllers
             bool outputtest1 = _circuit.EndNodes[0].calcOutput();
             bool outputtest2 = _circuit.EndNodes[1].calcOutput();
             var test = "eeeeeeeeeeeeeee";
+        }
+
+        public void runSim()
+        {
+            foreach (BaseNode node in _circuit.EndNodes)
+            {
+                node.calcOutput();
+            }
         }
     }
 }
