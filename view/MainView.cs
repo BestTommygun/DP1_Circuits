@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Circuits.Models.Nodes;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -13,10 +14,8 @@ namespace DP1_Circuits.view
 {
     public partial class MainView : Form
     {
-        private SimulationView _simulationView;
         public MainView()
         {
-            _simulationView = new SimulationView();
             InitializeComponent();
         }
 
@@ -33,6 +32,18 @@ namespace DP1_Circuits.view
             {
                 openFileDialog1.FileOk += (object s, CancelEventArgs Cargs) => fileOpened(openFileDialog1.FileName);
             }
+        }
+
+        public void setNodes(List<BaseNode> allNodes)
+        {
+            simulationView1.Nodes = allNodes;
+        }
+
+        public void displayPopup(string message)
+        {
+            ValidationPopup errorPopup = new ValidationPopup();
+            errorPopup.setMessage(message);
+            errorPopup.ShowDialog();
         }
     }
 }

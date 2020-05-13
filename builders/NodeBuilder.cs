@@ -13,61 +13,77 @@ namespace DP1_Circuits.builders
     {
         public Dictionary<string, BaseNode> allNodes = new Dictionary<string, BaseNode>();
         private BaseNode _currentNode;
-        public NodeBuilder buildNode(ParserData data)
+        public void buildNode(ParserData data)
         {
             switch (data.Type)
             {
                 case "AND":
-                    _currentNode = new AndNode();
+                    _currentNode = new AndNode(data.Id);
                     break;
                 case "OR":
-                    _currentNode = new AndNode();
+                    _currentNode = new OrNode(data.Id);
                     break;
                 case "INPUT_HIGH":
-                    _currentNode = new InputNode(true);
+                    _currentNode = new InputNode(data.Id, true);
                     break;
                 case "INPUT_LOW":
-                    _currentNode = new InputNode(false);
+                    _currentNode = new InputNode(data.Id, false);
                     break;
                 case "PROBE":
-                    _currentNode = new OutputNode();
+                    _currentNode = new OutputNode(data.Id);
                     break;
                 case "NOT":
-                    _currentNode = new NotNode();
+                    _currentNode = new NotNode(data.Id);
+                    break;
+                case "NAND":
+                    _currentNode = new NotNode(data.Id);
                     break;
                 default:
-                    break;
+                    throw new NotImplementedException();
             }
             allNodes.Add(data.Id, _currentNode);
-
-            return this;
         }
 
-        public NodeBuilder addInputs(ParserData data)
+        public void addInputs(ParserData data, Action<string> showErrorPopup)//TODO: maybe make circuitbuilder responsible for allnode collection
         {
             foreach (string output in data.Ouputs)
             {
                 if (allNodes.ContainsKey(output))
                 {
+                    allNodes[output].X = allNodes[data.Id].X >= allNodes[output].X ? allNodes[data.Id].X + 1 : allNodes[output].X;
+                    var sameLevelNodes = allNodes
+                        .Where(d => d.Value.X == allNodes[data.Id].X && d.Value.Y >= allNodes[data.Id].Y).ToList();
+                    allNodes[data.Id].Y = sameLevelNodes.Count > 0
+                        ? sameLevelNodes.Max(n => n.Value.Y) + 1
+                        : allNodes[data.Id].Y;
                     allNodes[output].Inputs.Add(allNodes[data.Id]);
                 }
                 else
                 {
-                    //TODO: throw error that it's trying to connect to a non existing node (bad file!)
+                    showErrorPopup.Invoke("Node tries to connect to a non-existing node");
                 }
 
             }
-            return this;
         }
-        public NodeBuilder addDelay(double delay)
+        public void addDelay(double delay)
         {
             _currentNode.Delay = delay;
-            return this;
         }
 
         public BaseNode getNode()
         {
             return this._currentNode;
+        }
+
+        public List<BaseNode> getAllNodes()
+        {
+            return this.allNodes.Values.ToList(); ;
+        }
+
+        public void reset()
+        {
+            this.allNodes = null;
+            this._currentNode = null;
         }
     }
 }

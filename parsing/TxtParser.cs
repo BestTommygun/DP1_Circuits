@@ -18,7 +18,6 @@ namespace DP1_Circuits.parsing
 
             using (TextFieldParser parser = new TextFieldParser(file))
             {
-                //TODO: this parser has 2 loops, reading the nodes and connecting the nodes
                 parser.TextFieldType = FieldType.Delimited;
                 string[] commentTokens = new string[1];
                 commentTokens[0] = "#";
@@ -41,10 +40,11 @@ namespace DP1_Circuits.parsing
                     curData = parser.ReadFields();
                 }
 
+                bool lastLine = false;
+
                 //get node connections
-                while (!parser.EndOfData) 
+                while (!parser.EndOfData || lastLine) 
                 {
-                    curData = parser.ReadFields();
                     var curParserData = parserData.Find(pd => pd.Id.Equals(curData[0]));
                     curParserData.Ouputs.AddRange(curData.Skip(1).First().Split(',').ToList());
                     List<string> newInputs = new List<string>();
@@ -52,6 +52,11 @@ namespace DP1_Circuits.parsing
                     curParserData.Ouputs = newInputs;
                     int index = parserData.FindIndex(pd => pd.Id.Equals(curParserData.Id));
                     parserData[index] = curParserData;
+                    curData = parser.ReadFields();
+                    //TODO: think of better way to handle the line skip at first or last position
+                    if (lastLine) break;
+                    if (parser.EndOfData) 
+                        lastLine = true;
                 }
             }
             return parserData;

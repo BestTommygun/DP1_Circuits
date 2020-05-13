@@ -1,12 +1,11 @@
 ﻿using Circuits.Models;
+using Circuits.Models.Nodes;
 using DP1_Circuits.builders;
 using DP1_Circuits.parsing;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DP1_Circuits.controllers
 {
@@ -14,28 +13,52 @@ namespace DP1_Circuits.controllers
     {
         private ViewController _viewController;
         private ModelController _modelController;
+        private InputController _inputController;
         private ParserFactory _parserFactory;
         private CircuitBuilder _circuitBuilder;
 
         public MainController()
         {
             _modelController = new ModelController();
+            _inputController = new InputController();
+            _inputController.setDefaultSetup(this);
             _parserFactory = new ParserFactory();
             _viewController = new ViewController();
             _viewController.fileOpened += (string file) => loadFile(file);
-
             _viewController.runView();
         }
 
-        public void loadFile(string file) //TODO: never fires the first click for some reason? maybe remove viewcontroller event
+        public void loadFile(string file) //TODO: never fires the first click for some reason? maybe remove viewcontroller event//it fucking subscribes a new event every circuit :(
         {
             if(!string.IsNullOrEmpty(file))
             {
                 _circuitBuilder = new CircuitBuilder();
                 FileStream fileStream = new FileStream(file, FileMode.Open);
                 List<ParserData> parserData = _parserFactory.returnParser(file).parse(fileStream);
-                _modelController.setCircuit(_circuitBuilder.buildCircuit(parserData));
+                _modelController.setCircuit(_circuitBuilder?.buildCircuit(parserData, showErrorPopup));
+                _viewController.drawFrame(_modelController.getNodes());
+                Program.log.Invoke("Succesfully loaded circuit");
             }
         }
+        public void showErrorPopup(string message)
+        {
+            _viewController.showErrorPopup(message);
+        }
+        #region inputView_command_methods
+        public Tuple<List<Tuple<BaseNode, bool>>, double> runSimulation()
+        {
+            var results = _modelController.runSim();
+            _viewController.drawFrame(_modelController.getNodes());
+            return results;
+        }
+        public void resetCircuit()
+        {
+            _modelController.resetNodes();
+        }
+        public List<BaseNode> getInputs()
+        {
+            return _modelController.getNodes()?.Where(n => n.GetType() == typeof(InputNode)).ToList();
+        }
+        #endregion
     }
 }

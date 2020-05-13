@@ -17,20 +17,33 @@ namespace DP1_Circuits.controllers
 
         }
 
-        public void setCircuit(Circuit newCircuit) //TODO: maybe only set the endNodes
+        public void setCircuit(Circuit newCircuit)
         {
             _circuit = newCircuit;
-            bool outputtest1 = _circuit.EndNodes[0].calcOutput();
-            bool outputtest2 = _circuit.EndNodes[1].calcOutput();
-            var test = "eeeeeeeeeeeeeee";
         }
 
-        public void runSim()
+        public List<BaseNode> getNodes()
         {
-            foreach (BaseNode node in _circuit.EndNodes)
+            return _circuit?.AllNodes;
+        }
+        public void resetNodes()
+        {
+            _circuit?.AllNodes.ForEach(n => n.SavedOutput = null);
+        }
+        public Tuple<List<Tuple<BaseNode, bool>>, double> runSim()
+        {
+            double executionTime = 0;
+            List<Tuple<BaseNode, bool>> outputs = new List<Tuple<BaseNode, bool>>();
+            if(_circuit != null && _circuit.EndNodes != null)
             {
-                node.calcOutput();
+                foreach (BaseNode node in _circuit.EndNodes)
+                {
+                    var curOutput = node.calcOutput();
+                    executionTime += curOutput.Item2;
+                    outputs.Add(new Tuple<BaseNode, bool>(node, curOutput.Item1));
+                }
             }
+            return new Tuple<List<Tuple<BaseNode, bool>>, double>(outputs, executionTime);
         }
     }
 }

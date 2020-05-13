@@ -1,4 +1,6 @@
-﻿using DP1_Circuits.view;
+﻿using Circuits.Models;
+using Circuits.Models.Nodes;
+using DP1_Circuits.view;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,14 +15,27 @@ namespace DP1_Circuits.controllers
         private MainView mainView;
         public delegate void FileOpenedHandler(string file);
         public event FileOpenedHandler fileOpened;
+        private IProgress<byte> threadSafeRefresh;
+
         public ViewController()
         {
             mainView = new MainView();
+            threadSafeRefresh = new Progress<byte>(e  => { this.mainView.Refresh(); });
         }
         public void runView()
         {
             mainView.fileOpened += (string file) => fileOpened(file);
             Application.Run(mainView);
+        }
+
+        public void drawFrame(List<BaseNode> allNodes)
+        {
+            mainView.setNodes(allNodes);
+            threadSafeRefresh.Report(0);
+        }
+        public void showErrorPopup(string message)
+        {
+            mainView.displayPopup(message);
         }
     }
 }

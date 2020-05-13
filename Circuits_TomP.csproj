@@ -49,9 +49,19 @@
   <ItemGroup>
     <Compile Include="builders\CircuitBuilder.cs" />
     <Compile Include="builders\NodeBuilder.cs" />
+    <Compile Include="Builder\IBuilder.cs" />
+    <Compile Include="Builder\OptionsBuilder.cs" />
+    <Compile Include="Commands\ChangeInputCommand.cs" />
+    <Compile Include="Commands\RunCachedCommand.cs" />
+    <Compile Include="Commands\ShowInputsCommand.cs" />
+    <Compile Include="controllers\Input\InputController.cs" />
     <Compile Include="controllers\ModelController.cs" />
     <Compile Include="controllers\MainController.cs" />
     <Compile Include="controllers\ViewController.cs" />
+    <Compile Include="Commands\BaseCommand.cs" />
+    <Compile Include="Commands\HelpCommand.cs" />
+    <Compile Include="Commands\Invoker.cs" />
+    <Compile Include="Commands\RunCommand.cs" />
     <Compile Include="parsing\IParser.cs" />
     <Compile Include="parsing\ParserAttribute.cs" />
     <Compile Include="parsing\ParserFactory.cs" />
@@ -70,6 +80,12 @@
     <Compile Include="view\SimulationView.Designer.cs">
       <DependentUpon>SimulationView.cs</DependentUpon>
     </Compile>
+    <Compile Include="view\ValidationPopup.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="view\ValidationPopup.Designer.cs">
+      <DependentUpon>ValidationPopup.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -84,6 +100,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="view\SimulationView.resx">
       <DependentUpon>SimulationView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="view\ValidationPopup.resx">
+      <DependentUpon>ValidationPopup.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -104,5 +123,6 @@
       <Name>Circuits.Models</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
