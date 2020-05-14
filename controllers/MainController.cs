@@ -55,9 +55,14 @@ namespace DP1_Circuits.controllers
         {
             _modelController.resetNodes();
         }
-        public List<BaseNode> getInputs()
+        public List<InputNode> getInputs()
         {
-            return _modelController.getNodes()?.Where(n => n.GetType() == typeof(InputNode)).ToList();
+            return _modelController.getInputs();
+        }
+        public void insertCircuit(string circuitId)
+        {
+
+            _viewController.drawFrame(_modelController.getNodes());
         }
         #endregion
     }

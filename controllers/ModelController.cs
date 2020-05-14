@@ -26,6 +26,10 @@ namespace DP1_Circuits.controllers
         {
             return _circuit?.AllNodes;
         }
+        public List<InputNode> getInputs()
+        {
+            return _circuit?.getInputs();
+        }
         public void resetNodes()
         {
             _circuit?.AllNodes.ForEach(n => n.SavedOutput = null);
