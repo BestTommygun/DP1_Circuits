@@ -20,11 +20,11 @@ namespace DP1_Circuits.controllers
         public ViewController()
         {
             mainView = new MainView();
+            mainView.fileOpened += (string file) => fileOpened(file);
             threadSafeRefresh = new Progress<byte>(e  => { this.mainView.Refresh(); });
         }
         public void runView()
         {
-            mainView.fileOpened += (string file) => fileOpened(file);
             Application.Run(mainView);
         }
 

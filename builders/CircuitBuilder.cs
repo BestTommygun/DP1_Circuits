@@ -50,7 +50,9 @@ namespace DP1_Circuits.builders
 
         private bool validateCircuit(Circuit circuit, Action<string> showErrorPopup)
         {
-            return !validateCircuitCircularity(circuit, showErrorPopup) && validateOutputInputConnectivity(circuit, showErrorPopup) && validateCircuitNotConnected(circuit, showErrorPopup);
+            return !validateCircuitCircularity(circuit, showErrorPopup)
+                && validateOutputInputConnectivity(circuit, showErrorPopup)
+                && validateCircuitNotConnected(circuit, showErrorPopup);
         }
 
         public bool validateCircuitNotConnected(Circuit circuit, Action<string> showErrorPopup)
@@ -114,7 +116,6 @@ namespace DP1_Circuits.builders
             }
             return returnValue;
         }
-
 
         private bool validateCircular(BaseNode curNode)
         {

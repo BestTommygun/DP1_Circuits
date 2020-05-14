@@ -37,7 +37,7 @@ namespace DP1_Circuits.controllers
                 List<ParserData> parserData = _parserFactory.returnParser(file).parse(fileStream);
                 _modelController.setCircuit(_circuitBuilder?.buildCircuit(parserData, showErrorPopup));
                 _viewController.drawFrame(_modelController.getNodes());
-                Program.log.Invoke("Succesfully loaded circuit");
+                Program.log.Invoke("> Loaded circuit");
             }
         }
         public void showErrorPopup(string message)

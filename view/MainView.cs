@@ -17,6 +17,7 @@ namespace DP1_Circuits.view
         public MainView()
         {
             InitializeComponent();
+            openFileDialog1.FileOk += (object s, CancelEventArgs Cargs) => fileOpened(openFileDialog1.FileName);
         }
 
         public delegate void FileOpenedHandler(string file);
@@ -28,10 +29,7 @@ namespace DP1_Circuits.view
             openFileDialog1.FileName = "";
             openFileDialog1.Filter = "TXT files (*.txt)|*.txt|XML files (*.xml)|*.xml";
             openFileDialog1.Title = "Open a circuit File...";
-            if (openFileDialog1.ShowDialog() == DialogResult.OK)
-            {
-                openFileDialog1.FileOk += (object s, CancelEventArgs Cargs) => fileOpened(openFileDialog1.FileName);
-            }
+            openFileDialog1.ShowDialog();
         }
 
         public void setNodes(List<BaseNode> allNodes)

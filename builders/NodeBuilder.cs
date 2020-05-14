@@ -46,6 +46,9 @@ namespace DP1_Circuits.builders
 
         public void addInputs(ParserData data, Action<string> showErrorPopup)//TODO: maybe make circuitbuilder responsible for allnode collection
         {
+            bool hasSetXY = false;
+            if (data.Id == "AND3")
+                Console.WriteLine("e!");
             foreach (string output in data.Ouputs)
             {
                 if (allNodes.ContainsKey(output))
@@ -57,12 +60,19 @@ namespace DP1_Circuits.builders
                         ? sameLevelNodes.Max(n => n.Value.Y) + 1
                         : allNodes[data.Id].Y;
                     allNodes[output].Inputs.Add(allNodes[data.Id]);
+                    hasSetXY = true;
                 }
                 else
                 {
                     showErrorPopup.Invoke("Node tries to connect to a non-existing node");
                 }
-
+            }
+            if (!hasSetXY) //means we need to set this nodes X and Y just to be sure we don't draw a bunch of nodes on top of eachother
+            {//TODO: theres no guaraintee that the output node will be the last, maybe seperate loop?
+                //TODO: if it isn't the last it fucks up the entire fucking hierarchy
+                var sameLevelNodes = allNodes
+                    .Where(d => d.Value.X == allNodes[data.Id].X && d.Value.Y >= allNodes[data.Id].Y).ToList();
+                allNodes[data.Id].Y = sameLevelNodes.Max(n => n.Value.Y) + 1;
             }
         }
         public void addDelay(double delay)

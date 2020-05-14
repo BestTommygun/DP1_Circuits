@@ -11,7 +11,6 @@ namespace Circuits.ConsoleInput.Options
         public RunCommand(MainController receiver)
             : base(receiver)
         {
-            Program.log.Invoke("Running simulation at full speed...");
         }
         public override void Execute(string commandText)
         {
