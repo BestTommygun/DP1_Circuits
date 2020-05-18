@@ -32,6 +32,17 @@ namespace DP1_Circuits.builders
                     _nodeBuilder.addInputs(data, showErrorPopup);
                     if (_nodeBuilder.allNodes[data.Id].GetType().Equals(typeof(OutputNode))) circuit.EndNodes.Add(_nodeBuilder.allNodes[data.Id]);
                 }
+                var outputNodes = _nodeBuilder.allNodes.Where(n => n.Value.GetType() == typeof(OutputNode)).ToList();
+                //TODO: maybe make this a bit prettier
+                List<int> checkedX = new List<int>();
+                foreach (var node in outputNodes)
+                {
+                    if(!checkedX.Contains(node.Value.X))
+                    {
+                        _nodeBuilder.checkY(node.Key);
+                        checkedX.Add(node.Value.X);
+                    }
+                }
                 circuit.AllNodes = _nodeBuilder.getAllNodes();
                 if (validateCircuit(circuit, showErrorPopup))
                 {

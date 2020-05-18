@@ -28,7 +28,7 @@ namespace DP1_Circuits.controllers
             _viewController.runView();
         }
 
-        public void loadFile(string file) //TODO: never fires the first click for some reason? maybe remove viewcontroller event//it fucking subscribes a new event every circuit :(
+        public void loadFile(string file) 
         {
             if(!string.IsNullOrEmpty(file))
             {

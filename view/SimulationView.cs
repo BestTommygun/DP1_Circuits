@@ -52,8 +52,6 @@ namespace DP1_Circuits.view
                 {
                     foreach (var inputNode in node.Inputs)
                     {
-                        //TODO: cool square lines?
-                        //adjust line colour based on last simulation
                         Pen linePen = inputNode.SavedOutput != null && inputNode.SavedOutput.Item1 ? new Pen(Color.Green) : new Pen(Color.Red);
                         linePen.Width = 2;
                         e.Graphics.DrawLine(
@@ -95,13 +93,13 @@ namespace DP1_Circuits.view
                     e.Graphics.DrawString(
                         "" + node.GetType().Name,
                         Font,
-                        new SolidBrush(Color.Red),
+                        new SolidBrush(colour),
                         new Point(node.X * xOffset + 2, node.Y * yOffset + 1)
                         );
                     e.Graphics.DrawString(
                         "" + node.Id,
                         Font,
-                        new SolidBrush(Color.Red),
+                        new SolidBrush(colour),
                         new Point(node.X * xOffset + 2, node.Y * yOffset + 26)
                         );
                 }
