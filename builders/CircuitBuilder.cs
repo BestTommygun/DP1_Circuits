@@ -1,5 +1,6 @@
 ﻿using Circuits.Models;
 using Circuits.Models.Nodes;
+using Circuits.Models.Nodes.NodeComponents;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,43 +11,48 @@ namespace DP1_Circuits.builders
 {
     public class CircuitBuilder
     {
-        private NodeBuilder _nodeBuilder;
+        private readonly NodeBuilder _nodeBuilder;
 
         public CircuitBuilder()
         {
             _nodeBuilder = new NodeBuilder();
         }
-        public Circuit buildCircuit(List<ParserData> parserData, Action<string> showErrorPopup)
+        public Circuit BuildCircuit(List<ParserData> parserData, Action<string> showErrorPopup)
         {
             if(parserData.Count > 0)
             {
                 Circuit circuit = new Circuit();
+                Dictionary<string, BaseNode> allNodes = new Dictionary<string, BaseNode>();
 
                 foreach (ParserData data in parserData)
                 {
-                    _nodeBuilder.buildNode(data);
+                    _nodeBuilder.BuildNode(data)
+                        .AddComponent(new VisualComponent(_nodeBuilder.GetNode()))
+                        .AddComponent(new CalcComponent(_nodeBuilder.GetNode()));
+                    allNodes.Add(data.Id, _nodeBuilder.GetNode());
                 }
 
                 foreach (ParserData data in parserData)
                 {
-                    _nodeBuilder.addInputs(data, showErrorPopup);
-                    if (_nodeBuilder.allNodes[data.Id].GetType().Equals(typeof(OutputNode))) circuit.EndNodes.Add(_nodeBuilder.allNodes[data.Id]);
+                    _nodeBuilder.AddInputs(data, allNodes, showErrorPopup);
                 }
-                var outputNodes = _nodeBuilder.allNodes.Where(n => n.Value.GetType() == typeof(OutputNode)).ToList();
+
+                var outputNodes = allNodes.Values.OfType<OutputNode>().ToList();
                 //TODO: maybe make this a bit prettier
                 List<int> checkedX = new List<int>();
                 foreach (var node in outputNodes)
                 {
-                    if(!checkedX.Contains(node.Value.X))
+                    if(!checkedX.Contains(node.X))
                     {
-                        _nodeBuilder.checkY(node.Key);
-                        checkedX.Add(node.Value.X);
+                        _nodeBuilder.CheckY(node.Id, allNodes);
+                        checkedX.Add(node.X);
                     }
                 }
-                circuit.AllNodes = _nodeBuilder.getAllNodes();
-                if (validateCircuit(circuit, showErrorPopup))
+                circuit.AllNodes = allNodes.Values.ToList();
+                circuit.EndNodes = allNodes.Values.OfType<OutputNode>().Cast<BaseNode>().ToList();
+                if (ValidateCircuit(circuit, showErrorPopup))
                 {
-                    _nodeBuilder.reset();
+                    _nodeBuilder.Reset();
                     return circuit;
                 }
                 else
@@ -59,14 +65,14 @@ namespace DP1_Circuits.builders
             return null;
         }
 
-        private bool validateCircuit(Circuit circuit, Action<string> showErrorPopup)
+        private bool ValidateCircuit(Circuit circuit, Action<string> showErrorPopup)
         {
-            return !validateCircuitCircularity(circuit, showErrorPopup)
-                && validateOutputInputConnectivity(circuit, showErrorPopup)
-                && validateCircuitNotConnected(circuit, showErrorPopup);
+            return !ValidateCircuitCircularity(circuit, showErrorPopup)
+                && ValidateOutputInputConnectivity(circuit, showErrorPopup)
+                && ValidateCircuitNotConnected(circuit, showErrorPopup);
         }
 
-        public bool validateCircuitNotConnected(Circuit circuit, Action<string> showErrorPopup)
+        public bool ValidateCircuitNotConnected(Circuit circuit, Action<string> showErrorPopup)
         {
             Dictionary<BaseNode, double> checkedNodes = new Dictionary<BaseNode, double>();
             foreach (var node in circuit.AllNodes)
@@ -95,7 +101,7 @@ namespace DP1_Circuits.builders
             return true;
         }
 
-        public bool validateOutputInputConnectivity(Circuit circuit, Action<string> showErrorPopup)
+        public bool ValidateOutputInputConnectivity(Circuit circuit, Action<string> showErrorPopup)
         {
             bool canReachInput(BaseNode curNode)
             {
@@ -110,15 +116,15 @@ namespace DP1_Circuits.builders
                 showErrorPopup.Invoke("Non reachable node detected in the circuit");
                 return false;
             }
-            return circuit.AllNodes.Where(n => n.GetType() == typeof(OutputNode)).All(n => canReachInput(n));
+            return circuit.AllNodes.OfType<OutputNode>().All(n => canReachInput(n));
         }
 
-        public bool validateCircuitCircularity(Circuit circuit, Action<string> showErrorPopup)
+        public bool ValidateCircuitCircularity(Circuit circuit, Action<string> showErrorPopup)
         {
             bool returnValue = false;
             foreach (BaseNode node in circuit.AllNodes)
             {
-                if (validateCircular(node))
+                if (ValidateCircular(node))
                 {
                     showErrorPopup.Invoke("Circuit contains circular reference");
                     return true;
@@ -128,13 +134,11 @@ namespace DP1_Circuits.builders
             return returnValue;
         }
 
-        private bool validateCircular(BaseNode curNode)
+        private bool ValidateCircular(BaseNode curNode)
         {
             bool isCircular(BaseNode node, BaseNode baseNode, IReadOnlyList<BaseNode> prevNodes)
             {
-                return (node.Inputs == null || node.Inputs.Count == 0)
-                    ? true
-                    : node.Inputs.All(n => {
+                return (node.Inputs == null || node.Inputs.Count == 0) || node.Inputs.All(n => {
                         if(n == baseNode)
                         {
                             return false;

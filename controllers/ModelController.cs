@@ -28,7 +28,7 @@ namespace DP1_Circuits.controllers
         }
         public List<InputNode> getInputs()
         {
-            return _circuit?.getInputs();
+            return _circuit?.GetInputs();
         }
         public void resetNodes()
         {
@@ -42,7 +42,7 @@ namespace DP1_Circuits.controllers
             {
                 foreach (BaseNode node in _circuit.EndNodes)
                 {
-                    var curOutput = node.calcOutput();
+                    var curOutput = node.CalcOutput();
                     executionTime += curOutput.Item2;
                     outputs.Add(new Tuple<BaseNode, bool>(node, curOutput.Item1));
                 }

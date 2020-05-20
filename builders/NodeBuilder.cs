@@ -6,45 +6,52 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Circuits.Models;
+using Circuits.Models.Nodes.NodeComponents;
+using System.CodeDom;
 
 namespace DP1_Circuits.builders
 {
     public class NodeBuilder
     {
-        public Dictionary<string, BaseNode> allNodes = new Dictionary<string, BaseNode>();
         private BaseNode _currentNode;
-        public void buildNode(ParserData data)
+        public NodeBuilder BuildNode(ParserData data)
         {
-            switch (data.Type)
+            _currentNode = data.Type switch 
             {
-                case "AND":
-                    _currentNode = new AndNode(data.Id);
-                    break;
-                case "OR":
-                    _currentNode = new OrNode(data.Id);
-                    break;
-                case "INPUT_HIGH":
-                    _currentNode = new InputNode(data.Id, true);
-                    break;
-                case "INPUT_LOW":
-                    _currentNode = new InputNode(data.Id, false);
-                    break;
-                case "PROBE":
-                    _currentNode = new OutputNode(data.Id);
-                    break;
-                case "NOT":
-                    _currentNode = new NotNode(data.Id);
-                    break;
-                case "NAND":
-                    _currentNode = new NotNode(data.Id);
-                    break;
-                default:
-                    throw new NotImplementedException();
+                "AND" => new AndNode(data.Id),
+                "OR" => new OrNode(data.Id),
+                "INPUT_HIGH" => new InputNode(data.Id, true),
+                "INPUT_LOW" => new InputNode(data.Id, false),
+                "PROBE" => new OutputNode(data.Id),
+                "NOT" => new NotNode(data.Id),
+                "NAND" => new NotNode(data.Id),
+                _ => throw new NotImplementedException()
+            };
+            return this;
+        }
+        public NodeBuilder AddComponent(Component component)
+        {
+            if (_currentNode.ContainsComponent(component))
+                throw new InvalidOperationException();
+
+            if(component.GetType() == typeof(CalcComponent))
+            {
+                _currentNode.AddComponent(_currentNode.GetType().Name switch
+                {
+                    "OrNode" => new ORCalcComponent(_currentNode),
+                    "AndNode" => new ANDCalcComponent(_currentNode),
+                    "NotNode" => new NOTCalcComponent(_currentNode),
+                    "InputNode" => null,
+                    "OutputNode" => null,
+                    _ => throw new NotImplementedException()
+                });
             }
-            allNodes.Add(data.Id, _currentNode);
+            else
+                _currentNode.AddComponent(component);
+            return this;
         }
 
-        public void addInputs(ParserData data, Action<string> showErrorPopup)//TODO: maybe make circuitbuilder responsible for allnode collection
+        public void AddInputs(ParserData data, Dictionary<string, BaseNode> allNodes, Action<string> showErrorPopup)
         {
             bool hasSetXY = false;
             foreach (string output in data.Ouputs)
@@ -59,12 +66,6 @@ namespace DP1_Circuits.builders
                         : allNodes[data.Id].Y;
                     allNodes[output].Inputs.Add(allNodes[data.Id]);
                     hasSetXY = true;
-                    var heyImaTest = sameLevelNodes.Aggregate((i1, i2) => i1.Y > i2.Y ? i1 : i2);
-                    if (heyImaTest.GetType() == typeof(OutputNode))
-                    {
-                        sameLevelNodes.Where(n => n.GetType() == typeof(OutputNode)).Cast<OutputNode>().Aggregate((i1, i2) => i1.Y > i2.Y ? i1 : i2).Y = allNodes[data.Id].Y;
-                        allNodes[data.Id].Y -= 1;
-                    }
                 }
                 else
                 {
@@ -82,7 +83,7 @@ namespace DP1_Circuits.builders
             }
         }
         //checks the Y of the given ID and if it isn't right will reset the entire row
-        public void checkY(string nodeId)
+        public void CheckY(string nodeId, Dictionary<string, BaseNode> allNodes)
         {
             var sameLevelNodes = allNodes.Values.Where(n => n.X == allNodes[nodeId].X && n.Y >= allNodes[nodeId].Y).ToList();
             if(sameLevelNodes.Count > 0)
@@ -100,24 +101,18 @@ namespace DP1_Circuits.builders
                 allNodes[nodeId].Y = 1;
             }
         }
-        public void addDelay(double delay)
+        public void AddDelay(double delay)
         {
             _currentNode.Delay = delay;
         }
 
-        public BaseNode getNode()
+        public BaseNode GetNode()
         {
             return this._currentNode;
         }
 
-        public List<BaseNode> getAllNodes()
+        public void Reset()
         {
-            return this.allNodes.Values.ToList();
-        }
-
-        public void reset()
-        {
-            this.allNodes = null;
             this._currentNode = null;
         }
     }

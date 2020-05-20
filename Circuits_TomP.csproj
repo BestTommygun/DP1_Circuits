@@ -6,9 +6,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{AF096937-E2CF-43DE-BFAB-5636860FE867}</ProjectGuid>
     <OutputType>WinExe</OutputType>
+    <OutputType>WinExe</OutputType>
     <RootNamespace>DP1_Circuits</RootNamespace>
     <AssemblyName>DP1_Circuits</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <LangVersion>8.0</LangVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
@@ -49,13 +51,12 @@
   <ItemGroup>
     <Compile Include="builders\CircuitBuilder.cs" />
     <Compile Include="builders\NodeBuilder.cs" />
-    <Compile Include="Builder\IBuilder.cs" />
-    <Compile Include="Builder\OptionsBuilder.cs" />
+    <Compile Include="builders\OptionsBuilder.cs" />
     <Compile Include="Commands\ChangeInputCommand.cs" />
     <Compile Include="Commands\InsertCircuitCommand.cs" />
     <Compile Include="Commands\RunCachedCommand.cs" />
     <Compile Include="Commands\ShowInputsCommand.cs" />
-    <Compile Include="controllers\Input\InputController.cs" />
+    <Compile Include="controllers\InputController.cs" />
     <Compile Include="controllers\ModelController.cs" />
     <Compile Include="controllers\MainController.cs" />
     <Compile Include="controllers\ViewController.cs" />

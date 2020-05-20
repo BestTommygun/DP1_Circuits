@@ -8,11 +8,12 @@ namespace Circuits.ConsoleInput.Options
 {
     public class HelpCommand : BaseCommand
     {
-        private List<string> helpCommands;
+        private readonly List<string> helpCommands;
         public HelpCommand(MainController receiver, List<string> commands) 
             : base(receiver)
         {
             helpCommands = commands;
+            helpCommands.Add("help");
         }
         public override void Execute(string commandText)
         {

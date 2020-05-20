@@ -12,30 +12,30 @@ namespace DP1_Circuits.controllers
 {
     public class ViewController
     {
-        private MainView mainView;
+        private readonly MainView mainView;
         public delegate void FileOpenedHandler(string file);
-        public event FileOpenedHandler fileOpened;
-        private IProgress<byte> threadSafeRefresh;
+        public event FileOpenedHandler FileOpened;
+        private readonly IProgress<byte> threadSafeRefresh;
 
         public ViewController()
         {
             mainView = new MainView();
-            mainView.fileOpened += (string file) => fileOpened(file);
+            mainView.FileOpened += (string file) => FileOpened(file);
             threadSafeRefresh = new Progress<byte>(e  => { this.mainView.Refresh(); });
         }
-        public void runView()
+        public void RunView()
         {
             Application.Run(mainView);
         }
 
-        public void drawFrame(List<BaseNode> allNodes)
+        public void DrawFrame(List<BaseNode> allNodes)
         {
-            mainView.setNodes(allNodes);
+            mainView.SetNodes(allNodes);
             threadSafeRefresh.Report(0);
         }
-        public void showErrorPopup(string message)
+        public void ShowErrorPopup(string message)
         {
-            mainView.displayPopup(message);
+            mainView.DisplayPopup(message);
         }
     }
 }

@@ -17,13 +17,13 @@ namespace DP1_Circuits.view
         public MainView()
         {
             InitializeComponent();
-            openFileDialog1.FileOk += (object s, CancelEventArgs Cargs) => fileOpened(openFileDialog1.FileName);
+            openFileDialog1.FileOk += (object s, CancelEventArgs Cargs) => FileOpened(openFileDialog1.FileName);
         }
 
         public delegate void FileOpenedHandler(string file);
-        public event FileOpenedHandler fileOpened;
+        public event FileOpenedHandler FileOpened;
 
-        private void openFileToolStripMenuItem_Click(object sender, EventArgs e)
+        private void OpenFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
             openFileDialog1.DefaultExt = ".txt";
             openFileDialog1.FileName = "";
@@ -32,12 +32,12 @@ namespace DP1_Circuits.view
             openFileDialog1.ShowDialog();
         }
 
-        public void setNodes(List<BaseNode> allNodes)
+        public void SetNodes(List<BaseNode> allNodes)
         {
             simulationView1.Nodes = allNodes;
         }
 
-        public void displayPopup(string message)
+        public void DisplayPopup(string message)
         {
             ValidationPopup errorPopup = new ValidationPopup();
             errorPopup.setMessage(message);

@@ -21,11 +21,11 @@ namespace DP1_Circuits.controllers
         {
             _modelController = new ModelController();
             _inputController = new InputController();
-            _inputController.setDefaultSetup(this);
+            _inputController.SetDefaultSetup(this);
             _parserFactory = new ParserFactory();
             _viewController = new ViewController();
-            _viewController.fileOpened += (string file) => loadFile(file);
-            _viewController.runView();
+            _viewController.FileOpened += (string file) => loadFile(file);
+            _viewController.RunView();
         }
 
         public void loadFile(string file) 
@@ -35,20 +35,20 @@ namespace DP1_Circuits.controllers
                 _circuitBuilder = new CircuitBuilder();
                 FileStream fileStream = new FileStream(file, FileMode.Open);
                 List<ParserData> parserData = _parserFactory.returnParser(file).parse(fileStream);
-                _modelController.setCircuit(_circuitBuilder?.buildCircuit(parserData, showErrorPopup));
-                _viewController.drawFrame(_modelController.getNodes());
+                _modelController.setCircuit(_circuitBuilder?.BuildCircuit(parserData, showErrorPopup));
+                _viewController.DrawFrame(_modelController.getNodes());
                 Program.log.Invoke("> Loaded circuit");
             }
         }
         public void showErrorPopup(string message)
         {
-            _viewController.showErrorPopup(message);
+            _viewController.ShowErrorPopup(message);
         }
         #region inputView_command_methods
         public Tuple<List<Tuple<BaseNode, bool>>, double> runSimulation()
         {
             var results = _modelController.runSim();
-            _viewController.drawFrame(_modelController.getNodes());
+            _viewController.DrawFrame(_modelController.getNodes());
             return results;
         }
         public void resetCircuit()
@@ -62,7 +62,7 @@ namespace DP1_Circuits.controllers
         public void insertCircuit(string circuitId)
         {
 
-            _viewController.drawFrame(_modelController.getNodes());
+            _viewController.DrawFrame(_modelController.getNodes());
         }
         #endregion
     }
