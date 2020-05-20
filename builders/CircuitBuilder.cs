@@ -23,7 +23,7 @@ namespace DP1_Circuits.builders
             {
                 var header = parserData[0];
                 parserData.RemoveAt(0);
-                Circuit circuit = new Circuit(header.headerData);
+                Circuit circuit = new Circuit(header.HeaderData);
                 Dictionary<string, BaseNode> allNodes = new Dictionary<string, BaseNode>();
 
                 foreach (ParserData data in parserData)

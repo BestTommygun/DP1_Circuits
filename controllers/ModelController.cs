@@ -16,28 +16,28 @@ namespace DP1_Circuits.controllers
         {
 
         }
-        public string getCircuitName()
+        public string GetCircuitName()
         {
             return _circuit.Name;
         }
-        public void setCircuit(Circuit newCircuit)
+        public void SetCircuit(Circuit newCircuit)
         {
             _circuit = newCircuit;
         }
 
-        public List<BaseNode> getNodes()
+        public List<BaseNode> GetNodes()
         {
             return _circuit?.AllNodes;
         }
-        public List<InputNode> getInputs()
+        public List<InputNode> GetInputs()
         {
             return _circuit?.GetInputs();
         }
-        public void resetNodes()
+        public void ResetNodes()
         {
             _circuit?.AllNodes.ForEach(n => n.SavedOutput = null);
         }
-        public Tuple<List<Tuple<BaseNode, bool>>, double> runSim()
+        public Tuple<List<Tuple<BaseNode, bool>>, double> RunSim()
         {
             double executionTime = 0;
             List<Tuple<BaseNode, bool>> outputs = new List<Tuple<BaseNode, bool>>();

@@ -17,12 +17,12 @@ namespace DP1_Circuits.Commands
 
         public override void Execute(string commandText)
         {
-            InputNode input = receiver.getInputs()?.FindAll(n => n.GetType() == typeof(InputNode)).Cast<InputNode>().ToList()
+            InputNode input = receiver.GetInputs()?.FindAll(n => n.GetType() == typeof(InputNode)).Cast<InputNode>().ToList()
                 .Find(n => n.Id.Equals(commandText.Split(' ')[1]));
             if(input != null)
             {
                 input.CurrentValue = !input.CurrentValue;
-                receiver.resetCircuit();
+                receiver.ResetCircuit();
                 Program.log.Invoke("> " + input.Id + " has been changed to " + input.CurrentValue);
             }
             else

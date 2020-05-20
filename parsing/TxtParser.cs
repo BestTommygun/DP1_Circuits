@@ -12,7 +12,7 @@ namespace DP1_Circuits.parsing
     [Parser(".txt")]
     public class TxtParser : IParser
     {
-        public List<ParserData> parse(string fileName, Stream file)
+        public List<ParserData> Parse(string fileName, Stream file)
         {
             List<ParserData> parserData = new List<ParserData>();
             using (TextFieldParser parser = new TextFieldParser(file))
@@ -46,6 +46,7 @@ namespace DP1_Circuits.parsing
                 {
                     var curParserData = parserData.Find(pd => pd.Id.Equals(curData[0]));
                     curParserData.Ouputs.AddRange(curData.Skip(1).First().Split(',').ToList());
+
                     List<string> newInputs = new List<string>();
                     curParserData.Ouputs.ForEach(node => newInputs.Add(node.Trim(';')));
                     curParserData.Ouputs = newInputs;
@@ -58,8 +59,10 @@ namespace DP1_Circuits.parsing
                         lastLine = true;
                 }
             }
-            ParserData header = new ParserData();
-            header.headerData = Path.GetFileName(fileName);
+            ParserData header = new ParserData
+            {
+                HeaderData = Path.GetFileName(fileName)
+            };
             parserData.Insert(0, header);
             return parserData;
         }

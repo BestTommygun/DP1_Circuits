@@ -14,10 +14,10 @@ namespace DP1_Circuits.Commands
             : base(receiver)
         { }
 
-        public override void Execute(string commandText)
+        public override void Execute(string commandText) //TODO: this
         {
-            if (commandText.Split(' ')[1] != null)
-                receiver.insertCircuit(commandText.Split(' ')[1]);
+            //if (commandText.Split(' ')[1] != null)
+                //receiver.InsertCircuit(commandText.Split(' ')[1]);
         }
     }
 }

@@ -16,7 +16,7 @@ namespace DP1_Circuits.view
         {
             InitializeComponent();
         }
-        public void setMessage(string text)
+        public void SetMessage(string text)
         {
             this.ErrorMessage.Text = text;
         }

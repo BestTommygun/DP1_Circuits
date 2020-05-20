@@ -14,6 +14,6 @@ namespace DP1_Circuits.parsing
         /// Returns the data from an input in ParserEntity format
         /// </summary>
         /// <param name="file">The Stream</param>
-        List<ParserData> parse(string fileName, Stream file);
+        List<ParserData> Parse(string fileName, Stream file);
     }
 }

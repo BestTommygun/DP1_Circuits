@@ -40,7 +40,7 @@ namespace DP1_Circuits.view
         public void DisplayPopup(string message)
         {
             ValidationPopup errorPopup = new ValidationPopup();
-            errorPopup.setMessage(message);
+            errorPopup.SetMessage(message);
             errorPopup.ShowDialog();
         }
     }

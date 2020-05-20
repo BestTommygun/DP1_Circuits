@@ -11,10 +11,10 @@ namespace DP1_Circuits.controllers
 {
     public class MainController
     {
-        private ViewController _viewController;
-        private ModelController _modelController;
-        private InputController _inputController;
-        private ParserFactory _parserFactory;
+        private readonly ViewController _viewController;
+        private readonly ModelController _modelController;
+        private readonly InputController _inputController;
+        private readonly ParserFactory _parserFactory;
         private CircuitBuilder _circuitBuilder;
 
         public MainController()
@@ -24,49 +24,48 @@ namespace DP1_Circuits.controllers
             _inputController.SetDefaultSetup(this);
             _parserFactory = new ParserFactory();
             _viewController = new ViewController();
-            _viewController.FileOpened += (string file) => loadFile(file);
+            _viewController.FileOpened += (string file) => LoadFile(file);
             _viewController.RunView();
         }
 
-        public void loadFile(string file) 
+        public void LoadFile(string file) 
         {
             if(!string.IsNullOrEmpty(file))
             {
                 _circuitBuilder = new CircuitBuilder();
                 FileStream fileStream = new FileStream(file, FileMode.Open);
-                List<ParserData> parserData = _parserFactory.returnParser(file).parse(file, fileStream);
-                _modelController.setCircuit(_circuitBuilder?.BuildCircuit(parserData, showErrorPopup));
-                _viewController.DrawFrame(_modelController.getNodes());
+                List<ParserData> parserData = _parserFactory.returnParser(file).Parse(file, fileStream);
+                _modelController.SetCircuit(_circuitBuilder?.BuildCircuit(parserData, ShowErrorPopup));
+                _viewController.DrawFrame(_modelController.GetNodes());
                 Program.log.Invoke("> Loaded circuit");
             }
         }
-        public void showErrorPopup(string message)
+        public void ShowErrorPopup(string message)
         {
             _viewController.ShowErrorPopup(message);
         }
         #region inputView_command_methods
-        public Tuple<List<Tuple<BaseNode, bool>>, double> runSimulation()
+        public Tuple<List<Tuple<BaseNode, bool>>, double> RunSimulation()
         {
-            var results = _modelController.runSim();
-            _viewController.DrawFrame(_modelController.getNodes());
+            var results = _modelController.RunSim();
+            _viewController.DrawFrame(_modelController.GetNodes());
             return results;
         }
-        public void resetCircuit()
+        public void ResetCircuit()
         {
-            _modelController.resetNodes();
+            _modelController.ResetNodes();
         }
-        public List<InputNode> getInputs()
+        public List<InputNode> GetInputs()
         {
-            return _modelController.getInputs();
+            return _modelController.GetInputs();
         }
-        public string getCircuitName()
+        public string GetCircuitName()
         {
-            return _modelController.getCircuitName();
+            return _modelController.GetCircuitName();
         }
-        public void insertCircuit(string circuitId)
+        public void InsertCircuit()
         {
-
-            _viewController.DrawFrame(_modelController.getNodes());
+            _viewController.DrawFrame(_modelController.GetNodes());
         }
         #endregion
     }

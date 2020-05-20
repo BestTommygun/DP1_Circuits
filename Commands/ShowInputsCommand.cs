@@ -17,7 +17,7 @@ namespace DP1_Circuits.Commands
 
         public override void Execute(string commandText)
         {
-            var inputs = receiver.getInputs();
+            var inputs = receiver.GetInputs();
             if(inputs != null && inputs.Count > 0)
             {
                 Program.log.Invoke("─────────[inputs: ]────────");
