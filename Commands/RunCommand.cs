@@ -16,7 +16,7 @@ namespace Circuits.ConsoleInput.Options
         {
             var results = receiver.runSimulation();
 
-            Program.log.Invoke("───────[ran simulation with the following results:]──────");
+            Program.log.Invoke("───────[ran simulation "+receiver.getCircuitName()+" with the following results:]──────");
             foreach (var result in results.Item1)
             {
                 Program.log.Invoke("> " + result.Item1.Id + ": " + result.Item2);

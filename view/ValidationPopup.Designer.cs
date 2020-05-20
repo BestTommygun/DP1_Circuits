@@ -40,6 +40,7 @@
             this.OkayButton.TabIndex = 1;
             this.OkayButton.Text = "OK";
             this.OkayButton.UseVisualStyleBackColor = true;
+            this.OkayButton.Click += new System.EventHandler(this.OkayButton_Click);
             // 
             // ErrorMessage
             // 

@@ -20,5 +20,10 @@ namespace DP1_Circuits.view
         {
             this.ErrorMessage.Text = text;
         }
+
+        private void OkayButton_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
     }
 }

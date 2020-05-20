@@ -12,10 +12,9 @@ namespace DP1_Circuits.parsing
     [Parser(".txt")]
     public class TxtParser : IParser
     {
-        public List<ParserData> parse(Stream file)
+        public List<ParserData> parse(string fileName, Stream file)
         {
             List<ParserData> parserData = new List<ParserData>();
-
             using (TextFieldParser parser = new TextFieldParser(file))
             {
                 parser.TextFieldType = FieldType.Delimited;
@@ -59,6 +58,9 @@ namespace DP1_Circuits.parsing
                         lastLine = true;
                 }
             }
+            ParserData header = new ParserData();
+            header.headerData = Path.GetFileName(fileName);
+            parserData.Insert(0, header);
             return parserData;
         }
     }

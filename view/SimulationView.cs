@@ -28,10 +28,14 @@ namespace DP1_Circuits.view
                     this.Invoke(new Action(() =>
                     {
                         this.SuspendLayout();
-                        var X = Nodes.Max(n => n.X);
-                        var Y = Nodes.Max(n => n.Y);
+                        var X = Nodes.Max(n => n.X) > 2
+                            ? Nodes.Max(n => n.X)
+                            : 2;
+                        var Y = Nodes.Max(n => n.Y) > 2
+                            ? Nodes.Max(n => n.Y) 
+                            : 2;
 
-                        this.Size = new Size(X * xOffset + 35 * X, Y * yOffset + 35 * Y);
+                        this.Size = new Size(X * xOffset + nodeSize.Width * X, Y * yOffset + nodeSize.Height * Y);
                         this.ResumeLayout();
                     }));
                 }
@@ -50,7 +54,7 @@ namespace DP1_Circuits.view
             {
                 foreach (var node in Nodes)
                 {
-                    foreach (var inputNode in node.Inputs)
+                    foreach (var inputNode in node.GetInputs())
                     {
                         Pen linePen = inputNode.SavedOutput != null && inputNode.SavedOutput.Item1 ? new Pen(Color.Green) : new Pen(Color.Red);
                         linePen.Width = 2;

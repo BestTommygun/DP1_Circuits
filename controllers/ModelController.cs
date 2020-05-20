@@ -16,7 +16,10 @@ namespace DP1_Circuits.controllers
         {
 
         }
-
+        public string getCircuitName()
+        {
+            return _circuit.Name;
+        }
         public void setCircuit(Circuit newCircuit)
         {
             _circuit = newCircuit;

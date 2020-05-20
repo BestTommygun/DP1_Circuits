@@ -21,7 +21,9 @@ namespace DP1_Circuits.builders
         {
             if(parserData.Count > 0)
             {
-                Circuit circuit = new Circuit();
+                var header = parserData[0];
+                parserData.RemoveAt(0);
+                Circuit circuit = new Circuit(header.headerData);
                 Dictionary<string, BaseNode> allNodes = new Dictionary<string, BaseNode>();
 
                 foreach (ParserData data in parserData)
@@ -37,7 +39,7 @@ namespace DP1_Circuits.builders
                     _nodeBuilder.AddInputs(data, allNodes, showErrorPopup);
                 }
 
-                var outputNodes = allNodes.Values.OfType<OutputNode>().ToList();
+                var outputNodes = allNodes.Values.ToList();
                 //TODO: maybe make this a bit prettier
                 List<int> checkedX = new List<int>();
                 foreach (var node in outputNodes)
@@ -77,9 +79,9 @@ namespace DP1_Circuits.builders
             Dictionary<BaseNode, double> checkedNodes = new Dictionary<BaseNode, double>();
             foreach (var node in circuit.AllNodes)
             {
-                if(!checkedNodes.ContainsKey(node) && node.Inputs.Count > 0)
+                if(!checkedNodes.ContainsKey(node) && node.GetInputs().Count > 0)
                     checkedNodes.Add(node, 0);
-                foreach (var input in node.Inputs)
+                foreach (var input in node.GetInputs())
                 {
                     if (checkedNodes.ContainsKey(input))
                         checkedNodes[input]++;
@@ -108,7 +110,7 @@ namespace DP1_Circuits.builders
                 if (curNode.GetType() == typeof(InputNode)) return true;
                 else
                 {
-                    foreach (var nextNode in curNode.Inputs)
+                    foreach (var nextNode in curNode.GetInputs())
                     {
                         if (canReachInput(nextNode)) return true;
                     }
@@ -138,7 +140,7 @@ namespace DP1_Circuits.builders
         {
             bool isCircular(BaseNode node, BaseNode baseNode, IReadOnlyList<BaseNode> prevNodes)
             {
-                return (node.Inputs == null || node.Inputs.Count == 0) || node.Inputs.All(n => {
+                return (node.GetInputs() == null || node.GetInputs().Count == 0) || node.GetInputs().All(n => {
                         if(n == baseNode)
                         {
                             return false;
@@ -151,7 +153,7 @@ namespace DP1_Circuits.builders
                         return isCircular(n,  baseNode, nodes);
                     });
             }
-            return !curNode.Inputs.All(n  =>  isCircular(n, curNode, new List<BaseNode> { curNode }));
+            return !curNode.GetInputs().All(n  =>  isCircular(n, curNode, new List<BaseNode> { curNode }));
         }
     }
 }

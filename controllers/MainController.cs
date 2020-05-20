@@ -34,7 +34,7 @@ namespace DP1_Circuits.controllers
             {
                 _circuitBuilder = new CircuitBuilder();
                 FileStream fileStream = new FileStream(file, FileMode.Open);
-                List<ParserData> parserData = _parserFactory.returnParser(file).parse(fileStream);
+                List<ParserData> parserData = _parserFactory.returnParser(file).parse(file, fileStream);
                 _modelController.setCircuit(_circuitBuilder?.BuildCircuit(parserData, showErrorPopup));
                 _viewController.DrawFrame(_modelController.getNodes());
                 Program.log.Invoke("> Loaded circuit");
@@ -58,6 +58,10 @@ namespace DP1_Circuits.controllers
         public List<InputNode> getInputs()
         {
             return _modelController.getInputs();
+        }
+        public string getCircuitName()
+        {
+            return _modelController.getCircuitName();
         }
         public void insertCircuit(string circuitId)
         {
