@@ -1,0 +1,9 @@
+# simulates an NOTnode using nor nodes
+# this uses the following image: https://nl.howtodou.com/b-electronics-logic-gates-universal-nor-gates-b
+A: INPUT_HIGH
+ONE: NOR
+OUTPUT: PROBE
+
+#connections:
+A: ONE
+ONE: OUTPUT

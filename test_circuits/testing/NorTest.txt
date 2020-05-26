@@ -1,0 +1,10 @@
+# simulates xnor
+A: INPUT_HIGH
+B: INPUT_LOW
+ONE: NOR
+OUTPUT: PROBE
+
+#connections:
+A: ONE
+B: ONE
+ONE: OUTPUT

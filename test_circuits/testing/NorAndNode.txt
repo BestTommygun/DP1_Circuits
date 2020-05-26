@@ -1,0 +1,21 @@
+# simulates an AND node using nor nodes
+# this uses the following image: https://nl.howtodou.com/b-electronics-logic-gates-universal-nor-gates-b
+A: INPUT_HIGH
+B: INPUT_LOW
+ONE: NOR
+NOTONE: NOT
+TWO: NOR
+NOTTWO: NOT
+THREE: NOR
+NOTTHREE: NOT
+OUTPUT: PROBE
+
+#connections:
+A: ONE
+B: TWO
+TWO: NOTTWO
+ONE: NOTONE
+NOTTWO: THREE
+NOTONE: THREE
+THREE: NOTTHREE
+NOTTHREE: OUTPUT
