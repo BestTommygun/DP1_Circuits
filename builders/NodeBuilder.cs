@@ -26,6 +26,7 @@ namespace DP1_Circuits.builders
                 "NOT" => new NotNode(data.Id),
                 "NAND" => BuildNAND(data.Id),
                 "NOR" => BuildNOR(data.Id),
+                "XNOR" => BuildXNOR(data.Id),
                 _ => throw new NotImplementedException()
             };
             return this;
@@ -41,14 +42,20 @@ namespace DP1_Circuits.builders
                 "PROBE" => new OutputNode(id),
                 "NOT" => new NotNode(id),
                 "NAND" => BuildNAND(id),
-                "NOR" => BuildNOR(id),
+                "NOR" => BuildNORVisual(id),
                 _ => throw new NotImplementedException()
             };
+        }
+        private NorNode BuildNORVisual(string id)
+        {
+            NorNode node = BuildNOR(id);
+            node.AddComponent(new VisualComponent(node));
+            return node;
         }
         private NorNode BuildNOR(string id)
         {
             OrNode orNode = (OrNode)BuildNode("OR", id + "|OR");
-            orNode.AddComponent(new ANDCalcComponent(orNode));
+            orNode.AddComponent(new ORCalcComponent(orNode));
             NotNode notNode = (NotNode)BuildNode("NOT", id + "|NOT");
             notNode.AddComponent(new NOTCalcComponent(notNode));
             notNode.AddInput(orNode);
@@ -60,6 +67,20 @@ namespace DP1_Circuits.builders
         {
             NorNode nor = BuildNOR(id + "|NOR");
             NandNode node = new NandNode(id, nor);
+            node.AddComponent(new VisualComponent(node));
+            return node;
+        }
+        public XNorNode BuildXNOR(string id)
+        {
+            NorNode one = BuildNOR(id + "|NOR_ONE");
+            NorNode two = BuildNOR(id + "|NOR_TWO");
+            NorNode three = BuildNOR(id + "|NOR_THREE");
+            NorNode four = BuildNOR(id + "|NOR_FOUR");
+            four.AddInput(two);
+            four.AddInput(three);
+            two.AddInput(one);
+            three.AddInput(one);
+            XNorNode node = new XNorNode(id, one, two, three, four);
             node.AddComponent(new VisualComponent(node));
             return node;
         }
@@ -78,6 +99,7 @@ namespace DP1_Circuits.builders
                     "InputNode" => null,
                     "OutputNode" => null,
                     "NorNode" => null,
+                    "XNorNode" => null,
                     "NandNode" => null,
                     _ => throw new NotImplementedException()
                 });;
