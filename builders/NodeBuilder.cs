@@ -14,6 +14,11 @@ namespace DP1_Circuits.builders
     public class NodeBuilder
     {
         private BaseNode _currentNode;
+        /// <summary>
+        /// builds a node out of parserData
+        /// </summary>
+        /// <param name="data">the data</param>
+        /// <returns>this, so you can easily chain commands</returns>
         public NodeBuilder BuildNode(ParserData data)
         {
             _currentNode = data.Type switch 
@@ -31,6 +36,12 @@ namespace DP1_Circuits.builders
             };
             return this;
         }
+        /// <summary>
+        /// builds node based on type and gives it an id
+        /// </summary>
+        /// <param name="type">the node type</param>
+        /// <param name="id">the id of the node</param>
+        /// <returns>the node</returns>
         private BaseNode BuildNode(string type, string id)
         {
             return type switch
@@ -84,8 +95,14 @@ namespace DP1_Circuits.builders
             node.AddComponent(new VisualComponent(node));
             return node;
         }
+        /// <summary>
+        /// adds a component to the current node, only use this after calling the build function
+        /// </summary>
+        /// <param name="component">the component to be added</param>
+        /// <returns>this, for easy chaining</returns>
         public NodeBuilder AddComponent(Component component)
         {
+            if (_currentNode == null) throw new InvalidOperationException();
             if (_currentNode.ContainsComponent(component))
                 throw new InvalidOperationException();
 
@@ -108,7 +125,12 @@ namespace DP1_Circuits.builders
                 _currentNode.AddComponent(component);
             return this;
         }
-
+        /// <summary>
+        /// adds inputs to the node
+        /// </summary>
+        /// <param name="data">the node data</param>
+        /// <param name="allNodes">the list of all already built nodes</param>
+        /// <param name="showErrorPopup">an error popup for internal validation</param>
         public void AddInputs(ParserData data, Dictionary<string, BaseNode> allNodes, Action<string> showErrorPopup)
         {
             foreach (string output in data.Ouputs)
@@ -129,7 +151,11 @@ namespace DP1_Circuits.builders
                 }
             }
         }
-        //checks the Y of the given ID and if it isn't right will reset the entire row
+        /// <summary>
+        /// checks the Y of the given ID and if it isn't right will reset the entire row
+        /// </summary>
+        /// <param name="nodeId">the node to be checked</param>
+        /// <param name="allNodes">all nodes</param>
         public void CheckY(string nodeId, Dictionary<string, BaseNode> allNodes)
         {
             var sameLevelNodes = allNodes.Values.Where(n => n.X == allNodes[nodeId].X && n.Y >= allNodes[nodeId].Y).ToList();

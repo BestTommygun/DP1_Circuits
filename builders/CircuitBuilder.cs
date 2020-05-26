@@ -17,6 +17,12 @@ namespace DP1_Circuits.builders
         {
             _nodeBuilder = new NodeBuilder();
         }
+        /// <summary>
+        /// Builds a circuit
+        /// </summary>
+        /// <param name="parserData">the data out of which the circuit will be built</param>
+        /// <param name="showErrorPopup">the error popup that the circuit can fire during validation</param>
+        /// <returns>the completed circuit</returns>
         public Circuit BuildCircuit(List<ParserData> parserData, Action<string> showErrorPopup)
         {
             if(parserData.Count > 0)
@@ -69,11 +75,17 @@ namespace DP1_Circuits.builders
 
         private bool ValidateCircuit(Circuit circuit, Action<string> showErrorPopup)
         {
+            ValidateCircuitAbnormality(circuit, showErrorPopup);
             return !ValidateCircuitCircularity(circuit, showErrorPopup)
                 && ValidateOutputInputConnectivity(circuit, showErrorPopup)
                 && ValidateCircuitNotConnected(circuit, showErrorPopup);
         }
-
+        /// <summary>
+        /// checks the circuit for nodes that do not have outputs
+        /// </summary>
+        /// <param name="circuit"></param>
+        /// <param name="showErrorPopup"></param>
+        /// <returns>wether the circuit has nodes without outputs</returns>
         public bool ValidateCircuitNotConnected(Circuit circuit, Action<string> showErrorPopup)
         {
             Dictionary<BaseNode, double> checkedNodes = new Dictionary<BaseNode, double>();
@@ -102,7 +114,12 @@ namespace DP1_Circuits.builders
             }
             return true;
         }
-
+        /// <summary>
+        /// checks if the all outputNodes can reach an inputNode
+        /// </summary>
+        /// <param name="circuit"></param>
+        /// <param name="showErrorPopup"></param>
+        /// <returns>wether all outputNodes can connect to an inputnode</returns>
         public bool ValidateOutputInputConnectivity(Circuit circuit, Action<string> showErrorPopup)
         {
             bool canReachInput(BaseNode curNode)
@@ -120,7 +137,12 @@ namespace DP1_Circuits.builders
             }
             return circuit.AllNodes.OfType<OutputNode>().All(n => canReachInput(n));
         }
-
+        /// <summary>
+        /// validates the circuit for circular references
+        /// </summary>
+        /// <param name="circuit"></param>
+        /// <param name="showErrorPopup"></param>
+        /// <returns>wether the circuit contains a circular reference</returns>
         public bool ValidateCircuitCircularity(Circuit circuit, Action<string> showErrorPopup)
         {
             bool returnValue = false;
@@ -135,7 +157,11 @@ namespace DP1_Circuits.builders
             }
             return returnValue;
         }
-
+        /// <summary>
+        /// validates the node for circular references in its inputs
+        /// </summary>
+        /// <param name="curNode"></param>
+        /// <returns>wether the inputs contain a circular reference</returns>
         private bool ValidateCircular(BaseNode curNode)
         {
             bool isCircular(BaseNode node, BaseNode baseNode, IReadOnlyList<BaseNode> prevNodes)
@@ -154,6 +180,23 @@ namespace DP1_Circuits.builders
                     });
             }
             return !curNode.GetInputs().All(n  =>  isCircular(n, curNode, new List<BaseNode> { curNode }));
+        }
+        /// <summary>
+        /// checks all node for abnormalities, will give the user a pop up if something is found, 
+        /// this function is purely for user friendlyness it does not actually validate anything.
+        /// </summary>
+        /// <param name="circuit">the circuit to be checked for abnormalities</param>
+        /// <param name="showErrorPopup">the error popup action</param>
+        private void ValidateCircuitAbnormality(Circuit circuit, Action<string> showErrorPopup)
+        {
+            void isAbnormal(BaseNode node)
+            {
+                if (node.GetType() == typeof(NotNode) && node.GetInputs().Count > 1) showErrorPopup.Invoke("Your circuit contains a NOT node with more than one input \n Circuit will ignore all but the first");
+            }
+            foreach (var node in circuit.AllNodes)
+            {
+                isAbnormal(node);
+            }
         }
     }
 }
