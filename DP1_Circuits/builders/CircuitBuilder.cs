@@ -46,7 +46,7 @@ namespace DP1_Circuits.builders
                 }
 
                 var outputNodes = allNodes.Values.ToList();
-                //TODO: maybe make this a bit prettier
+                //this makes sure the y position of all nodes are correct
                 List<int> checkedX = new List<int>();
                 foreach (var node in outputNodes)
                 {
@@ -65,7 +65,7 @@ namespace DP1_Circuits.builders
                 }
                 else
                 {
-                    //showErrorPopup.Invoke("something went wrong with validating your circuit");
+                    showErrorPopup.Invoke("something went wrong with validating your circuit");
                     return null;
                 }
             }

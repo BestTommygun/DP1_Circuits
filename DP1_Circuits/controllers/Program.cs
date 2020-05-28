@@ -7,9 +7,9 @@ namespace DP1_Circuits
     public static class Program
     {
         public delegate void LogDelegate(string text);
-        public static LogDelegate log; //send text to log
+        public static LogDelegate log;                              //send text to log
         public delegate void CommandDelegate(string commandText);
-        public static event CommandDelegate CommandRecievedEvent; //get text from log
+        public static event CommandDelegate CommandRecievedEvent;   //get text from log
 
         /// <summary>
         /// The main entry point for the application.
@@ -19,8 +19,8 @@ namespace DP1_Circuits
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            log.Invoke("────────────[warming up logger...]────────────");
-            MainController mainController = new MainController();
+            log.Invoke("────────────[starting up logger...]────────────");
+            _ = new MainController();
         }
 
         public static void SendCommand(string commandText) => CommandRecievedEvent?.Invoke(commandText);

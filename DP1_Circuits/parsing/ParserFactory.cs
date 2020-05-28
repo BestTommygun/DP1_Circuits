@@ -12,7 +12,7 @@ namespace DP1_Circuits.parsing
 {
     public class ParserFactory
     {
-        private Dictionary<string, Func<IParser>> _parsers = typeof(ParserFactory).Assembly.GetTypes()
+        private readonly Dictionary<string, Func<IParser>> _parsers = typeof(ParserFactory).Assembly.GetTypes()
             .Where(t => t.GetInterfaces().Contains(typeof(IParser)))
             .Where(t => t.IsClass)
             .Where(t => t.GetConstructors().Any(c => c.GetParameters().Length == 0))
@@ -21,7 +21,7 @@ namespace DP1_Circuits.parsing
                     { return (IParser)t.GetConstructors().Single(c => c.GetParameters().Length == 0).Invoke(new object[0]); })))
             .ToDictionary(t => t.Item1, t => t.Item2);
 
-        public IParser returnParser(string file)
+        public IParser ReturnParser(string file)
         {
             if(!string.IsNullOrEmpty(file))
             {

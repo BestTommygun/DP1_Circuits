@@ -26,9 +26,12 @@ namespace DP1_Circuits.controllers
 
         public InputController()
         {
-            Program.CommandRecievedEvent += (string text) => HandleInput(text);
+            Program.CommandRecievedEvent += (string text) => HandleInput(text); //subscribe to the event that fires when the user inputs text in the console
         }
-
+        /// <summary>
+        /// Sanitizes the input and invokes the proper command
+        /// </summary>
+        /// <param name="commandText">the user typed text</param>
         public void HandleInput(string commandText)
         {
             var inputText = commandText.Split(' ');

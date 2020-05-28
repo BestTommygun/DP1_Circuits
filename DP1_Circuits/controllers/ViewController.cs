@@ -13,9 +13,9 @@ namespace DP1_Circuits.controllers
     public class ViewController
     {
         private readonly MainView mainView;
+        private readonly IProgress<byte> threadSafeRefresh;
         public delegate void FileOpenedHandler(string file);
         public event FileOpenedHandler FileOpened;
-        private readonly IProgress<byte> threadSafeRefresh;
 
         public ViewController()
         {
@@ -27,7 +27,10 @@ namespace DP1_Circuits.controllers
         {
             Application.Run(mainView);
         }
-
+        /// <summary>
+        /// resets all the nodes, refreshes the view (since the view is on a seperate thread we must use the IProgress workaround for a thread safe refresh)
+        /// </summary>
+        /// <param name="allNodes">the new nodes to be drawn</param>
         public void DrawFrame(List<BaseNode> allNodes)
         {
             mainView.SetNodes(allNodes);

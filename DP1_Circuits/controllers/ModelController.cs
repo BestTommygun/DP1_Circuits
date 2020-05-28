@@ -11,10 +11,31 @@ namespace DP1_Circuits.controllers
     public class ModelController
     {
         private Circuit _circuit;
-
-        public ModelController()
+        /// <summary>
+        /// resets all the savedOutputs of the nodes to null
+        /// </summary>
+        public void ResetNodes()
         {
-
+            _circuit?.AllNodes.ForEach(n => n.SavedOutput = null);
+        }
+        /// <summary>
+        /// runs the simulation and returns a list of all outputs, their 
+        /// </summary>
+        /// <returns></returns>
+        public Tuple<List<Tuple<BaseNode, bool>>, double> RunSim()
+        {
+            double executionTime = 0;
+            List<Tuple<BaseNode, bool>> outputs = new List<Tuple<BaseNode, bool>>();
+            if (_circuit != null && _circuit.EndNodes != null)
+            {
+                foreach (BaseNode node in _circuit.EndNodes)
+                {
+                    var curOutput = node.CalcOutput();
+                    executionTime += curOutput.Item2;
+                    outputs.Add(new Tuple<BaseNode, bool>(node, curOutput.Item1));
+                }
+            }
+            return new Tuple<List<Tuple<BaseNode, bool>>, double>(outputs, executionTime);
         }
         public string GetCircuitName()
         {
@@ -32,25 +53,6 @@ namespace DP1_Circuits.controllers
         public List<InputNode> GetInputs()
         {
             return _circuit?.GetInputs();
-        }
-        public void ResetNodes()
-        {
-            _circuit?.AllNodes.ForEach(n => n.SavedOutput = null);
-        }
-        public Tuple<List<Tuple<BaseNode, bool>>, double> RunSim()
-        {
-            double executionTime = 0;
-            List<Tuple<BaseNode, bool>> outputs = new List<Tuple<BaseNode, bool>>();
-            if(_circuit != null && _circuit.EndNodes != null)
-            {
-                foreach (BaseNode node in _circuit.EndNodes)
-                {
-                    var curOutput = node.CalcOutput();
-                    executionTime += curOutput.Item2;
-                    outputs.Add(new Tuple<BaseNode, bool>(node, curOutput.Item1));
-                }
-            }
-            return new Tuple<List<Tuple<BaseNode, bool>>, double>(outputs, executionTime);
         }
     }
 }

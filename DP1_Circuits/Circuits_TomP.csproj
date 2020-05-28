@@ -53,8 +53,6 @@
     <Compile Include="builders\NodeBuilder.cs" />
     <Compile Include="builders\OptionsBuilder.cs" />
     <Compile Include="Commands\ChangeInputCommand.cs" />
-    <Compile Include="Commands\InsertCircuitCommand.cs" />
-    <Compile Include="Commands\RunCachedCommand.cs" />
     <Compile Include="Commands\ShowInputsCommand.cs" />
     <Compile Include="controllers\InputController.cs" />
     <Compile Include="controllers\ModelController.cs" />
@@ -62,7 +60,6 @@
     <Compile Include="controllers\ViewController.cs" />
     <Compile Include="Commands\BaseCommand.cs" />
     <Compile Include="Commands\HelpCommand.cs" />
-    <Compile Include="Commands\Invoker.cs" />
     <Compile Include="Commands\RunCommand.cs" />
     <Compile Include="parsing\IParser.cs" />
     <Compile Include="parsing\ParserAttribute.cs" />

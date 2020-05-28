@@ -33,9 +33,11 @@ namespace DP1_Circuits.controllers
             if(!string.IsNullOrEmpty(file))
             {
                 _circuitBuilder = new CircuitBuilder();
+
                 FileStream fileStream = new FileStream(file, FileMode.Open);
-                List<ParserData> parserData = _parserFactory.returnParser(file).Parse(file, fileStream);
+                List<ParserData> parserData = _parserFactory.ReturnParser(file).Parse(file, fileStream);
                 _modelController.SetCircuit(_circuitBuilder?.BuildCircuit(parserData, ShowErrorPopup));
+
                 _viewController.DrawFrame(_modelController.GetNodes());
                 Program.log.Invoke("> Loaded circuit");
             }

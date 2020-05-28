@@ -16,7 +16,7 @@ namespace DP1_Circuits.builders
         {
             _currentController = controller;
         }
-        public OptionsBuilder AddCommand(string commandText) //TODO: maybe implement cachedrun?
+        public OptionsBuilder AddCommand(string commandText)
         {
             if (_commands == null) _commands = new Dictionary<string, BaseCommand>();
             _currentText = commandText;

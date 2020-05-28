@@ -42,7 +42,7 @@ namespace DP1_Circuits.parsing
                 bool lastLine = false;
 
                 //get node connections
-                while (!parser.EndOfData || lastLine) 
+                while (!parser.EndOfData || lastLine)
                 {
                     var curParserData = parserData.Find(pd => pd.Id.Equals(curData[0]));
                     curParserData.Ouputs.AddRange(curData.Skip(1).First().Split(',').ToList());
@@ -50,10 +50,12 @@ namespace DP1_Circuits.parsing
                     List<string> newInputs = new List<string>();
                     curParserData.Ouputs.ForEach(node => newInputs.Add(node.Trim(';')));
                     curParserData.Ouputs = newInputs;
+
                     int index = parserData.FindIndex(pd => pd.Id.Equals(curParserData.Id));
                     parserData[index] = curParserData;
+
                     curData = parser.ReadFields();
-                    //TODO: think of better way to handle the line skip at first or last position
+                    //parser ignores the last line unless we do this
                     if (lastLine) break;
                     if (parser.EndOfData) 
                         lastLine = true;
@@ -64,6 +66,7 @@ namespace DP1_Circuits.parsing
                 HeaderData = Path.GetFileName(fileName)
             };
             parserData.Insert(0, header);
+
             return parserData;
         }
     }
