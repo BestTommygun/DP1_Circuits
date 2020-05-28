@@ -7,7 +7,7 @@ using System.Text;
 
 namespace Circuits.Models.Nodes
 {
-    public abstract class BaseNode //TODO: check delays for composite nodes
+    public abstract class BaseNode
     {
         public string Id { get; }
         public Tuple<bool, double> SavedOutput {

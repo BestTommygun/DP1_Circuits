@@ -32,6 +32,8 @@ namespace Circuits.Models.Nodes
             if (notNode != null && orNode != null)
             {
                 var savedOutput = notNode.CalcOutput();
+                //since the node needs 2 nodes to calculate its output we will remove one standard delay
+                savedOutput = new Tuple<bool, double>(savedOutput.Item1, savedOutput.Item2 - notNode.Delay);
                 if (components.OfType<VisualComponent>().Any())
                     components.OfType<VisualComponent>().FirstOrDefault().SavedOutput = savedOutput;
                 return savedOutput;
