@@ -57,7 +57,6 @@ namespace Circuits.Models.Nodes
         {
             inputs = new List<BaseNode>();
             components = new List<Component>();
-            this.Delay = 15;
             this.X = 0;
             this.Y = 1;
             Id = "";
@@ -66,16 +65,6 @@ namespace Circuits.Models.Nodes
         {
             inputs = new List<BaseNode>();
             components = new List<Component>();
-            this.Delay = 15;
-            this.X = 0;
-            this.Y = 1;
-            this.Id = Id;
-        }
-        public BaseNode(string Id, List<BaseNode> inputs, double delay)
-        {
-            this.inputs = inputs;
-            components = new List<Component>();
-            this.Delay = delay;
             this.X = 0;
             this.Y = 1;
             this.Id = Id;
@@ -84,16 +73,6 @@ namespace Circuits.Models.Nodes
         {
             this.inputs = inputs;
             components = new List<Component>();
-            this.Delay = 15;
-            this.X = 0;
-            this.Y = 1;
-            this.Id = Id;
-        }
-        public BaseNode(string Id, List<Component> components, double delay)
-        {
-            this.components = components;
-            this.inputs = new List<BaseNode>();
-            this.Delay = delay;
             this.X = 0;
             this.Y = 1;
             this.Id = Id;
@@ -102,16 +81,14 @@ namespace Circuits.Models.Nodes
         {
             this.components = components;
             this.inputs = new List<BaseNode>();
-            this.Delay = 15;
             this.X = 0;
             this.Y = 1;
             this.Id = Id;
         }
-        public BaseNode(string Id, List<Component> components, List<BaseNode> inputs, double delay)
+        public BaseNode(string Id, List<Component> components, List<BaseNode> inputs)
         {
             this.components = components;
             this.inputs = inputs;
-            this.Delay = delay;
             this.X = 0;
             this.Y = 1;
             this.Id = Id;
@@ -119,7 +96,13 @@ namespace Circuits.Models.Nodes
         #endregion
 
         protected List<BaseNode> inputs;
-        public double Delay { get; set; }
+        public double Delay {
+            get {
+                return components.OfType<DelayComponent>().Any()
+                    ? components.OfType<DelayComponent>().First().GetDelay()
+                    : 0.0;
+                    } 
+        }
 
         public virtual Tuple<bool, double> CalcOutput() {
 

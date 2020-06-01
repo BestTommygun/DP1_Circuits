@@ -68,7 +68,7 @@ namespace Circuits.Models.Nodes
         {
             var savedOutput = four.CalcOutput();
             //since the node contains 4 subnodes we need to remove the delay of 3 of these nodes
-            savedOutput = new Tuple<bool, double>(savedOutput.Item1, savedOutput.Item2 - (two.Delay + three.Delay + four.Delay));
+            savedOutput = new Tuple<bool, double>(savedOutput.Item1, savedOutput.Item2 + this.Delay);
             if (components.OfType<VisualComponent>().Any())
                 components.OfType<VisualComponent>().FirstOrDefault().SavedOutput = savedOutput;
             return savedOutput;

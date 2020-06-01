@@ -30,6 +30,7 @@ namespace Circuits.Models.Nodes
             if (norNode != null)
             {
                 var savedOutput = norNode.CalcOutput();
+                savedOutput = new Tuple<bool, double>(savedOutput.Item1, savedOutput.Item2 + this.Delay);
                 if (components.OfType<VisualComponent>().Any())
                     components.OfType<VisualComponent>().FirstOrDefault().SavedOutput = savedOutput;
                 return savedOutput;

@@ -19,7 +19,7 @@ namespace Circuits.Models.Nodes.NodeComponents
                     var inputOutput = input.CalcOutput();
                     if (inputOutput.Item2 > biggestDelay) biggestDelay = inputOutput.Item2;
                     if (inputOutput.Item1 == false)
-                    { 
+                    {
                         return new Tuple<bool, double>(false, biggestDelay + this.Parent.Delay);
                     }
                 }
