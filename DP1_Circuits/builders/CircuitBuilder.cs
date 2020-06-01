@@ -36,7 +36,8 @@ namespace DP1_Circuits.builders
                 {
                     _nodeBuilder.BuildNode(data)
                         .AddComponent(new VisualComponent(_nodeBuilder.GetNode()))
-                        .AddComponent(new CalcComponent(_nodeBuilder.GetNode()));
+                        .AddComponent(new CalcComponent(_nodeBuilder.GetNode()))
+                        .AddComponent(new DelayComponent(_nodeBuilder.GetNode(), 15));
                     allNodes.Add(data.Id, _nodeBuilder.GetNode());
                 }
 

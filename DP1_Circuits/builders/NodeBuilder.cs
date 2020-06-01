@@ -171,10 +171,6 @@ namespace DP1_Circuits.builders
                 allNodes[nodeId].Y = 1;
             }
         }
-        public void AddDelay(double delay)
-        {
-            _currentNode.Delay = delay;
-        }
 
         public BaseNode GetNode()
         {
